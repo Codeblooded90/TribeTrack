@@ -8,9 +8,15 @@
 
     <h2>Create Group</h2>
     <form action="/create_group" method="POST">
-        <input type="text" name="group_name" placeholder="Enter group name" required>
-        <button type="submit">Create</button>
-    </form>
+    <input type="text" name="group_name" placeholder="Enter group name" required>
+
+    <select name="mode">
+        <option value="support">Support Mode</option>
+        <option value="competitive">Competitive Mode</option>
+    </select>
+
+    <button type="submit">Create</button>
+</form>
 
     <h2>Groups</h2>
 
@@ -18,7 +24,7 @@
          <div style="margin-bottom: 30px;">
         <h3>{{ group }}</h3>
 
-        <!-- Set Habit -->
+       <p><strong>Mode:</strong> {{ details.get("mode", "support") }}</p>
         <form action="/set_habit" method="POST">
             <input type="hidden" name="group_name" value="{{ group }}">
             <input type="text" name="habit" placeholder="Enter habit" required>
@@ -27,34 +33,46 @@
 
         <p><strong>Habit:</strong> {{ details.habit if details.habit else "Not set" }}</p>
 
-        <!-- Add Member -->
+        
         <form action="/add_member" method="POST">
             <input type="hidden" name="group_name" value="{{ group }}">
             <input type="text" name="member_name" placeholder="Enter member name" required>
             <button type="submit">Add Member</button>
         </form>
 
-        <!-- Members -->
-        <ul>
-            {% for member in details.members %}
-                <li>
-                    {{ member }}
+        
+       <ul>
+    {% for member in details.members %}
+        <li>
+            {{ member }}
 
-                    <form action="/mark_done" method="POST" style="display:inline;">
-                        <input type="hidden" name="group_name" value="{{ group }}">
-                        <input type="hidden" name="member_name" value="{{ member }}">
-                        <button type="submit">Done</button>
-                    </form>
+            <form action="/mark_done" method="POST" style="display:inline;">
+                <input type="hidden" name="group_name" value="{{ group }}">
+                <input type="hidden" name="member_name" value="{{ member }}">
+                <button type="submit">Done</button>
+            </form>
 
-                    {% if details.progress and details.progress.get(member) %}
-                        ✅
-                    {% else %}
-                        ❌
-                    {% endif %}
-                </li>
-            {% endfor %}
-        </ul>
+            {% if details.get("progress") and details["progress"].get(member) %}
+                ✅
+            {% else %}
+                ❌
+            {% endif %}
+
+            | Streak: {{ details.get("streaks", {}).get(member, 0) }}
+        </li>
+    {% endfor %}
+</ul>
+{% if details.get("mode") == "competitive" %}
+    <h4>Leaderboard 🏆</h4>
+    <ol>
+        {% for member, score in details.get("leaderboard", []) %}
+            <li>{{ member }} - {{ score }}</li>
+        {% endfor %}
+    </ol>
+{% endif %}
+</ol>
     </div>
+    
     {% endfor %}
 
 </body>
