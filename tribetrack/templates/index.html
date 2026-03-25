@@ -4,7 +4,58 @@
     <title>TribeTrack</title>
 </head>
 <body>
-    <h1>Welcome to TribeTrack 🚀</h1>
-    <p>Your social habit tracker</p>
+    <h1>TribeTrack 🚀</h1>
+
+    <h2>Create Group</h2>
+    <form action="/create_group" method="POST">
+        <input type="text" name="group_name" placeholder="Enter group name" required>
+        <button type="submit">Create</button>
+    </form>
+
+    <h2>Groups</h2>
+
+    {% for group, details in groups.items() %}
+         <div style="margin-bottom: 30px;">
+        <h3>{{ group }}</h3>
+
+        <!-- Set Habit -->
+        <form action="/set_habit" method="POST">
+            <input type="hidden" name="group_name" value="{{ group }}">
+            <input type="text" name="habit" placeholder="Enter habit" required>
+            <button type="submit">Set Habit</button>
+        </form>
+
+        <p><strong>Habit:</strong> {{ details.habit if details.habit else "Not set" }}</p>
+
+        <!-- Add Member -->
+        <form action="/add_member" method="POST">
+            <input type="hidden" name="group_name" value="{{ group }}">
+            <input type="text" name="member_name" placeholder="Enter member name" required>
+            <button type="submit">Add Member</button>
+        </form>
+
+        <!-- Members -->
+        <ul>
+            {% for member in details.members %}
+                <li>
+                    {{ member }}
+
+                    <form action="/mark_done" method="POST" style="display:inline;">
+                        <input type="hidden" name="group_name" value="{{ group }}">
+                        <input type="hidden" name="member_name" value="{{ member }}">
+                        <button type="submit">Done</button>
+                    </form>
+
+                    {% if details.progress and details.progress.get(member) %}
+                        ✅
+                    {% else %}
+                        ❌
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endfor %}
+
 </body>
 </html>
