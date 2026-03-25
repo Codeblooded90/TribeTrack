@@ -21,4 +21,4 @@ A social habit tracking system that builds accountability through group streaks,
 - Anudh Krishna
 - Varshithaa Dhanagopal
 - Nandhini Sellakumar
-  
+- Uditanshu Panigrahi 
