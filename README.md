@@ -18,4 +18,7 @@ A social habit tracking system that builds accountability through group streaks,
 3. Open http://127.0.0.1:5000
 
 ##  Team
-- Your names
+- Anudh Krishna
+- Varshithaa Dhanagopal
+- Nandhini Sellakumar
+  
